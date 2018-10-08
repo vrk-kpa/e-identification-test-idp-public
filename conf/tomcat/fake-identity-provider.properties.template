@@ -1,0 +1,33 @@
+# Shibboleth Identity Provider properties
+failure.param.internal=fakeint
+failure.param.entityid=entid
+
+country.AT=AT/FI/24243SKFSA3;Maximilian Jakob;Austria;1981-02-03
+country.GB=GB/FI/24243SKFSA5;Oliver Jack;Great Britain;1981-02-04
+country.ES=ES/FI/24243SKFSA4;José Pedro;Spain;1981-02-05
+country.HU=HU/FI/24243SKFSA8;Bence Máté;Unkari;1981-02-07
+country.IR=IR/FI/24243SKFSA9;Jack  Daniel;Ireland;1981-02-08
+country.LV=LV/FI/24243SKFSAA;Roberts Markuss;Latvia;1981-02-09
+country.LT=LT/FI/24243SKFSAB;Lukas Matas;Liettua;1981-02-10
+country.RO=RO/FI/24243SKFSAE;Andrei David;Romania;1981-02-12
+country.SL=SL/FI/24243SKFSAF;Luka Filip;Slovenia;1981-02-13
+country.SV=SV/FI/24243SKFSA1;Elias Hugo;Sweden;1981-02-14
+country.NK=NK/FI/24243SKFSA0;Mathias Oliver;Norway;1981-02-15
+country.DK=DK/FI/253243SKFSA21;Sofia Alma;Danmark;1981-02-17
+country.ML=ML/FI/253243SKFSA51;Emma Julia;Malta; 1981-02-18
+country.PT=PT/FI/253243SKFSA71;Maria Leonor;Portugal;1981-02-19
+country.IT=IT/FI/253243SKFSAF1;Giulia Aurora;Italy;1981-02-22
+country.BE=BE/FI/253243SKFSAE1;Marie Julie;Belgium;1981-02-23
+country.CZ=CZ/FI/253243SKFSAD1;Agata Anastazie;Czech Republic;1981-02-24
+country.LU=LU/FI/253243SKFSAD1;Emma Lara;Luxembourg;1981-02-25
+country.GR=GR/FI/253243SKFSA31;Eleni Katerina;Greece;1981-02-16
+country.NL=NL/FI/253243SKFSA32;Anna Emma;The Netherlands;1981-02-26
+country.BG=BG/FI/253243SKFSA32;Elisaveta;Bulgaria;1981-02-27
+country.CY=CY/FI/253243SKFSA32;Androula;Cyprus;1981-02-28
+country.SK=SK/FI/253243SKFSA39;Jozef;Slovakia;1981-03-01
+#country.UK=UK/FI/7b33d355df3f812f86d8efc6c2f69da30dbe35cc3d2ab01451e2de5511e7e626;Oliver Jack;Great Britain;1981-02-04
+country.UK=UK/FI/Lorem0ipsum0dolor0sit0amet10consectetur0adipiscing0elit10sed0do0eiusmod0tempor0incididunt0ut0labore0et0dolore0magna0aliqua.0Ut0enim0ad0minim0veniam10quis0nostrud0exercitation0ullamco0laboris0nisi0ut0aliquip0ex0ea0commodo0consequat.0Duis0aute0irure0do;Oliver Jack;Great Britain;1981-02-04
+country.EE=EE/FI/381020220044;Rasmus;Estonia;1981-02-02
+country.DE=DE/FI/366193B0E55D436B494769486A9284D04E0A1DCFDBF8B9EDA63E5BF4C3CFE6F5;Leon Elias;Germany;1981-02-06
+country.PL=PL/FI/81021100141;Jakub Aleksander;Poland;1981-02-11
+country.FR=FR/FI/6c0133a79bdd72c3f414b1b635868cdad4db51ccf459a7998ae084bd83201c90v1;Louise Alice;France;1981-02-21
