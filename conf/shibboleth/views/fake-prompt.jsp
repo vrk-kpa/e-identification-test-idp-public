@@ -23,7 +23,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/resources/stylesheets/style.css">
     <script src="/resources/js/vendor/modernizr-2.8.3.min.js"></script>
-    <script src="/resources/js/vendor/jquery-1.11.2.min.js"></script>
+    <script src="/resources/js/vendor/jquery.min.js"></script>
     <script src="/resources/js/plugins.js"></script>
     <script src="/resources/js/main.js"></script>
     <script src="/resources/js/vendor/js.cookie.js"></script>

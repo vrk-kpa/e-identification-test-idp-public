@@ -1,110 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<resolver:AttributeResolver
-        xmlns:resolver="urn:mace:shibboleth:2.0:resolver" 
-        xmlns:pc="urn:mace:shibboleth:2.0:resolver:pc"
-        xmlns:ad="urn:mace:shibboleth:2.0:resolver:ad" 
-        xmlns:dc="urn:mace:shibboleth:2.0:resolver:dc"
-        xmlns:enc="urn:mace:shibboleth:2.0:attribute:encoder" 
-        xmlns:sec="urn:mace:shibboleth:2.0:security"
+<AttributeResolver
+        xmlns="urn:mace:shibboleth:2.0:resolver"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    	xsi:schemaLocation="urn:mace:shibboleth:2.0:resolver http://shibboleth.net/schema/idp/shibboleth-attribute-resolver.xsd
-                            urn:mace:shibboleth:2.0:resolver:pc http://shibboleth.net/schema/idp/shibboleth-attribute-resolver-pc.xsd
-                            urn:mace:shibboleth:2.0:resolver:ad http://shibboleth.net/schema/idp/shibboleth-attribute-resolver-ad.xsd
-                            urn:mace:shibboleth:2.0:resolver:dc http://shibboleth.net/schema/idp/shibboleth-attribute-resolver-dc.xsd
-                            urn:mace:shibboleth:2.0:attribute:encoder http://shibboleth.net/schema/idp/shibboleth-attribute-encoder.xsd
-                            urn:mace:shibboleth:2.0:security http://shibboleth.net/schema/idp/shibboleth-security.xsd">
+        xsi:schemaLocation="urn:mace:shibboleth:2.0:resolver http://shibboleth.net/schema/idp/shibboleth-attribute-resolver.xsd">
 
     <!-- ========================================== -->
     <!--      Attribute Definitions                 -->
     <!-- ========================================== -->
 
-    <resolver:AttributeDefinition id="electronicIdentificationNumber" xsi:type="ad:Script">
-        <resolver:AttributeEncoder xsi:type="enc:SAML2String" name="urn:oid:1.2.246.22" friendlyName="electronicIdentificationNumber" encodeType="false" />
-        <ad:Script><![CDATA[
+    <AttributeDefinition id="electronicIdentificationNumber" xsi:type="ScriptedAttribute">
+        <AttributeEncoder xsi:type="SAML2String" name="urn:oid:1.2.246.22" friendlyName="electronicIdentificationNumber" encodeType="false" />
+        <Script><![CDATA[
           authnContext = resolutionContext.getParent().getSubcontext("net.shibboleth.idp.authn.context.AuthenticationContext");
           fakeContext = authnContext.getSubcontext("fi.vm.kapa.identification.shibboleth.extauthn.context.FakeContext");
           if ( fakeContext != null && fakeContext.getSatu() != null ) {
             electronicIdentificationNumber.addValue(fakeContext.getSatu());
           }
-        ]]></ad:Script>
-    </resolver:AttributeDefinition>
+        ]]></Script>
+    </AttributeDefinition>
 
-    <resolver:AttributeDefinition id="nationalIdentificationNumber" xsi:type="ad:Script">
-        <resolver:AttributeEncoder xsi:type="enc:SAML2String" name="urn:oid:1.2.246.21" friendlyName="nationalIdentificationNumber" encodeType="false" />
-        <ad:Script><![CDATA[
+    <AttributeDefinition id="nationalIdentificationNumber" xsi:type="ScriptedAttribute">
+        <AttributeEncoder xsi:type="SAML2String" name="urn:oid:1.2.246.21" friendlyName="nationalIdentificationNumber" encodeType="false" />
+        <Script><![CDATA[
           authnContext = resolutionContext.getParent().getSubcontext("net.shibboleth.idp.authn.context.AuthenticationContext");
           fakeContext = authnContext.getSubcontext("fi.vm.kapa.identification.shibboleth.extauthn.context.FakeContext");
           if ( fakeContext != null && fakeContext.getHetu() != null ) {
             nationalIdentificationNumber.addValue(fakeContext.getHetu());
           }
-        ]]></ad:Script>
-    </resolver:AttributeDefinition>
+        ]]></Script>
+    </AttributeDefinition>
 
-    <resolver:AttributeDefinition id="issuerCN" xsi:type="ad:Script">
-        <resolver:AttributeEncoder xsi:type="enc:SAML2String" name="urn:oid:1.2.246.517.3002.111.4" friendlyName="issuerCN" encodeType="false" />
-        <ad:Script><![CDATA[
+    <AttributeDefinition id="issuerCN" xsi:type="ScriptedAttribute">
+        <AttributeEncoder xsi:type="SAML2String" name="urn:oid:1.2.246.517.3002.111.4" friendlyName="issuerCN" encodeType="false" />
+        <Script><![CDATA[
           authnContext = resolutionContext.getParent().getSubcontext("net.shibboleth.idp.authn.context.AuthenticationContext");
           fakeContext = authnContext.getSubcontext("fi.vm.kapa.identification.shibboleth.extauthn.context.FakeContext");
           if ( fakeContext != null && fakeContext.getIssuerCN() != null ) {
             issuerCN.addValue(fakeContext.getIssuerCN());
           }
-        ]]></ad:Script>
-    </resolver:AttributeDefinition>
+        ]]></Script>
+    </AttributeDefinition>
 
-    <resolver:AttributeDefinition id="cn" xsi:type="ad:Script">
-        <resolver:AttributeEncoder xsi:type="enc:SAML2String" name="urn:oid:2.5.4.3" friendlyName="cn" encodeType="false" />
-        <ad:Script><![CDATA[
+    <AttributeDefinition id="cn" xsi:type="ScriptedAttribute">
+        <AttributeEncoder xsi:type="SAML2String" name="urn:oid:2.5.4.3" friendlyName="cn" encodeType="false" />
+        <Script><![CDATA[
           authnContext = resolutionContext.getParent().getSubcontext("net.shibboleth.idp.authn.context.AuthenticationContext");
           fakeContext = authnContext.getSubcontext("fi.vm.kapa.identification.shibboleth.extauthn.context.FakeContext");
           if ( fakeContext != null && fakeContext.getCn() != null ) {
             cn.addValue(fakeContext.getCn());
           }
-        ]]></ad:Script>
-    </resolver:AttributeDefinition>
+        ]]></Script>
+    </AttributeDefinition>
 
-    <resolver:AttributeDefinition id="PersonIdentifier" xsi:type="ad:Script">
-        <resolver:AttributeEncoder xsi:type="enc:SAML2String" name="http://eidas.europa.eu/attributes/naturalperson/PersonIdentifier" friendlyName="PersonIdentifier" encodeType="false" />
-        <ad:Script><![CDATA[
+    <AttributeDefinition id="PersonIdentifier" xsi:type="ScriptedAttribute">
+        <AttributeEncoder xsi:type="SAML2String" name="http://eidas.europa.eu/attributes/naturalperson/PersonIdentifier" friendlyName="PersonIdentifier" encodeType="false" />
+        <Script><![CDATA[
           authnContext = resolutionContext.getParent().getSubcontext("net.shibboleth.idp.authn.context.AuthenticationContext");
           fakeContext = authnContext.getSubcontext("fi.vm.kapa.identification.shibboleth.extauthn.context.FakeContext");
           if ( fakeContext != null && fakeContext.getPersonIdentifier() != null ) {
             PersonIdentifier.addValue(fakeContext.getPersonIdentifier());
           }
-        ]]></ad:Script>
-    </resolver:AttributeDefinition>
+        ]]></Script>
+    </AttributeDefinition>
 
-    <resolver:AttributeDefinition id="FirstName" xsi:type="ad:Script">
-        <resolver:AttributeEncoder xsi:type="enc:SAML2String" name="http://eidas.europa.eu/attributes/naturalperson/CurrentGivenName" friendlyName="FirstName" encodeType="false" />
-        <ad:Script><![CDATA[
+    <AttributeDefinition id="FirstName" xsi:type="ScriptedAttribute">
+        <AttributeEncoder xsi:type="SAML2String" name="http://eidas.europa.eu/attributes/naturalperson/CurrentGivenName" friendlyName="FirstName" encodeType="false" />
+        <Script><![CDATA[
           authnContext = resolutionContext.getParent().getSubcontext("net.shibboleth.idp.authn.context.AuthenticationContext");
           fakeContext = authnContext.getSubcontext("fi.vm.kapa.identification.shibboleth.extauthn.context.FakeContext");
           if ( fakeContext != null && fakeContext.getFirstName() != null ) {
             FirstName.addValue(fakeContext.getFirstName());
           }
-        ]]></ad:Script>
-    </resolver:AttributeDefinition>
+        ]]></Script>
+    </AttributeDefinition>
 
-    <resolver:AttributeDefinition id="FamilyName" xsi:type="ad:Script">
-        <resolver:AttributeEncoder xsi:type="enc:SAML2String" name="http://eidas.europa.eu/attributes/naturalperson/CurrentFamilyName" friendlyName="FamilyName" encodeType="false" />
-        <ad:Script><![CDATA[
+    <AttributeDefinition id="FamilyName" xsi:type="ScriptedAttribute">
+        <AttributeEncoder xsi:type="SAML2String" name="http://eidas.europa.eu/attributes/naturalperson/CurrentFamilyName" friendlyName="FamilyName" encodeType="false" />
+        <Script><![CDATA[
           authnContext = resolutionContext.getParent().getSubcontext("net.shibboleth.idp.authn.context.AuthenticationContext");
           fakeContext = authnContext.getSubcontext("fi.vm.kapa.identification.shibboleth.extauthn.context.FakeContext");
           if ( fakeContext != null && fakeContext.getFamilyName() != null ) {
             FamilyName.addValue(fakeContext.getFamilyName());
           }
-        ]]></ad:Script>
-    </resolver:AttributeDefinition>
+        ]]></Script>
+    </AttributeDefinition>
 
-    <resolver:AttributeDefinition id="DateOfBirth" xsi:type="ad:Script">
-        <resolver:AttributeEncoder xsi:type="enc:SAML2String" name="http://eidas.europa.eu/attributes/naturalperson/DateOfBirth" friendlyName="DateOfBirth" encodeType="false" />
-        <ad:Script><![CDATA[
+    <AttributeDefinition id="DateOfBirth" xsi:type="ScriptedAttribute">
+        <AttributeEncoder xsi:type="SAML2String" name="http://eidas.europa.eu/attributes/naturalperson/DateOfBirth" friendlyName="DateOfBirth" encodeType="false" />
+        <Script><![CDATA[
           authnContext = resolutionContext.getParent().getSubcontext("net.shibboleth.idp.authn.context.AuthenticationContext");
           fakeContext = authnContext.getSubcontext("fi.vm.kapa.identification.shibboleth.extauthn.context.FakeContext");
           if ( fakeContext != null && fakeContext.getDateOfBirth() != null ) {
             DateOfBirth.addValue(fakeContext.getDateOfBirth());
           }
-        ]]></ad:Script>
-    </resolver:AttributeDefinition>
+        ]]></Script>
+    </AttributeDefinition>
 
-</resolver:AttributeResolver>
+</AttributeResolver>

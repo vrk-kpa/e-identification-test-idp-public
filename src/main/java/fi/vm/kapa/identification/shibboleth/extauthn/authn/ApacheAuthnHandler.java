@@ -148,6 +148,6 @@ public class ApacheAuthnHandler {
             }
         }
         // default values
-        return new String [] {"default_pid", "default_fn", "default_sn", "default_dob"};
+        return new String [] {"", "", "", ""};
     }
 }
