@@ -24,6 +24,9 @@
 package fi.vm.kapa.identification.shibboleth.extauthn.authn;
 
 import fi.vm.kapa.identification.shibboleth.extauthn.context.FakeContext;
+import fi.vm.kapa.identification.shibboleth.extauthn.context.FakeEidasContext;
+import fi.vm.kapa.identification.shibboleth.extauthn.context.FakeForeignContext;
+import fi.vm.kapa.identification.type.AuthMethod;
 import net.shibboleth.idp.authn.ExternalAuthentication;
 import net.shibboleth.idp.authn.ExternalAuthenticationException;
 import net.shibboleth.idp.authn.context.AuthenticationContext;
@@ -63,14 +66,18 @@ public class ApacheAuthnHandler {
             final String key = ExternalAuthentication.startExternalAuthentication(httpRequest);
 
             ProfileRequestContext prc = ExternalAuthentication.getProfileRequestContext(key, httpRequest);
+            AuthenticationContext ac = prc.getSubcontext(AuthenticationContext.class);
 
-            FakeContext hcc;
-            if ( isEidasRequest(prc) ) {
-                String[] userData = getUserDataByCookie(httpRequest);
-                hcc = new FakeContext(null, null ,null, null, userData[0], userData[1], userData[2], userData[3]);
-                logger.debug("eIDAS authentication");
+            if ( isForeignIdentification(prc) ) {
+                String[] userData = httpRequest.getParameter("foreign_identity").split(";");
+                ac.addSubcontext( new FakeForeignContext(userData[0], userData[1], userData[2], userData[3]));
+                logger.debug("Foreign authentication");
             }
-            else {
+            else if (isEidasRequest(prc)) {
+                String[] userData = getUserDataByCookie(httpRequest);
+                ac.addSubcontext(new FakeEidasContext(userData[0], userData[1], userData[2], userData[3]));
+                logger.debug("eIDAS authentication");
+            } else {
                 String satu = httpRequest.getParameter("satu");
                 String hetu = httpRequest.getParameter("hetu");
 
@@ -82,19 +89,16 @@ public class ApacheAuthnHandler {
                 // 2. Mimic HST card; return satu + issuerCN
                 // 3. Mimic organization card; return hetu
 
-                if ( !mimicHstIdp && StringUtils.isNotBlank(hetu) && hetu.length() > 6 ) {
-                    cn =  "Testihenkilö " + hetu.substring(0, 6);
-                }
-                else if ( mimicHstIdp && StringUtils.isNotBlank(satu) ) {
+                if (!mimicHstIdp && StringUtils.isNotBlank(hetu) && hetu.length() > 6) {
+                    cn = "Testihenkilö " + hetu.substring(0, 6);
+                } else if (mimicHstIdp && StringUtils.isNotBlank(satu)) {
                     issuerCN = "VRK CA for Test Purposes - G2";
                 }
 
-                hcc = new FakeContext(satu, hetu, issuerCN, cn, null, null, null, null);
-                logger.debug("SATU: "+satu+", HETU: "+hetu+", issuerCN: "+issuerCN+", CN: "+cn);
+                ac.addSubcontext(new FakeContext(satu, hetu, issuerCN, cn));
+                logger.debug("SATU: " + satu + ", HETU: " + hetu + ", issuerCN: " + issuerCN + ", CN: " + cn);
             }
 
-            AuthenticationContext ac = prc.getSubcontext(AuthenticationContext.class);
-            ac.addSubcontext(hcc);
             httpRequest.setAttribute(ExternalAuthentication.PRINCIPAL_NAME_KEY, "FAKE");
             ExternalAuthentication.finishExternalAuthentication(key, httpRequest, httpResponse);
 
@@ -109,7 +113,19 @@ public class ApacheAuthnHandler {
             List<AuthnContextClassRef> authnContextClassRefs = message.getRequestedAuthnContext().getAuthnContextClassRefs();
             if( !CollectionUtils.isEmpty(authnContextClassRefs) ) {
                 String classRef = authnContextClassRefs.get(0).getAuthnContextClassRef();
-                return "urn:oid:1.2.246.517.3002.110.995".equals(classRef) || "http://ftn.ficora.fi/2017/loa3".equals(classRef);
+                return AuthMethod.TESTIDP.getOidValue().equals(classRef) || AuthMethod.fLoA3.getOidValue().equals(classRef);
+            }
+        }
+        return false;
+    }
+
+    public static boolean isForeignIdentification(ProfileRequestContext prc) {
+        AuthnRequest message = (AuthnRequest) prc.getInboundMessageContext().getMessage();
+        if( message.getRequestedAuthnContext() != null) {
+            List<AuthnContextClassRef> authnContextClassRefs = message.getRequestedAuthnContext().getAuthnContextClassRefs();
+            if( !CollectionUtils.isEmpty(authnContextClassRefs) ) {
+                String classRef = authnContextClassRefs.get(0).getAuthnContextClassRef();
+                return AuthMethod.FFI.getOidValue().equals(classRef);
             }
         }
         return false;
@@ -121,7 +137,7 @@ public class ApacheAuthnHandler {
             List<AuthnContextClassRef> authnContextClassRefs = message.getRequestedAuthnContext().getAuthnContextClassRefs();
             if( !CollectionUtils.isEmpty(authnContextClassRefs) ) {
                 String classRef = authnContextClassRefs.get(0).getAuthnContextClassRef();
-                return "http://eidas.europa.eu/LoA/high".equals(classRef) || "http://eidas.europa.eu/LoA/substantial".equals(classRef);
+                return AuthMethod.eLoA2.getOidValue().equals(classRef) || AuthMethod.eLoA3.getOidValue().equals(classRef);
             }
         }
         return false;

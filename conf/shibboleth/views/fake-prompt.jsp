@@ -8,6 +8,7 @@
     final ProfileRequestContext prc = ExternalAuthentication.getProfileRequestContext(request.getParameter(ExternalAuthentication.CONVERSATION_KEY), request);
     boolean showSatu = ApacheAuthnHandler.showSatu(prc);
     boolean directSubmit = ApacheAuthnHandler.isEidasRequest(prc);
+    boolean foreignSubmit = ApacheAuthnHandler.isForeignIdentification(prc);
 %>
 
 <!doctype html>
@@ -81,10 +82,10 @@
     <div class="main hst-idp-page">
         <div class="container">
             <h2><%= showSatu ? "Test IdP" : "Testitunnistaja"%></h2>
-            <p>Testitunnistajan avulla voit tunnistautua Suomi.fi-tunnistuksen testiympäristössä valitsemallasi testihenkilötunnuksella.</p>
-            <p>Löydät lisätietoja käytettävissä olevista testihenkilötunnuksista <a target="_blank" href="https://palveluhallinta.suomi.fi/fi/tuki/artikkelit/5a82ef7ab03cdc41de664a2b">Palveluhallinnasta</a>.</p>
+            <p>Testitunnistajan avulla voit tunnistautua Suomi.fi-tunnistuksen testiympäristössä valitsemallasi testitunnisteella (henkilötunnus/SATU/Ulkomaalaisen tunniste).</p>
+            <p>Löydät lisätietoja käytettävissä olevista testitunnisteista <a target="_blank" href="https://palveluhallinta.suomi.fi/fi/tuki/artikkelit/5a82ef7ab03cdc41de664a2b">Palveluhallinnasta</a>.</p>
             <ul class="instructions">
-                <li>1. Syötä alla olevaan kenttään testihenkilötunnus</li>
+                <li>1. Syötä alla olevaan kenttään vaadittu testitunniste (henkilötunnus/SATU) tai valitse ulkomaalaisen identiteetti</li>
                 <li>2. Valitse "Tunnistaudu"</li>
             </ul>
             <div class="row">
@@ -95,7 +96,21 @@
                                 <input type="hidden" name="<%= ExternalAuthentication.CONVERSATION_KEY %>"
                                        value="<c:out value="<%= request.getParameter(ExternalAuthentication.CONVERSATION_KEY) %>" />">
 
-                                <% if ( showSatu ) { %>
+                                <% if ( foreignSubmit ) { %>
+                                <div class="input-container">
+                                    <input type="radio" id="1" name="foreign_identity" value="7000791435;Max;Mustermann;1970-01-01" checked />
+                                    <label for="1">7000791435, Max Mustermann, 1970-01-01</label><br>
+                                    <input type="radio" id="2" name="foreign_identity" value="700020880P;Anders;Andersen;1971-02-01"/>
+                                    <label for="2">700020880P, Anders Andersen, 1971-02-01</label><br>
+                                    <input type="radio" id="3" name="foreign_identity" value="700064221T;Janina;Kowalska;1972-05-01"/>
+                                    <label for="3">700064221T, Janina Kowalska, 1972-05-01</label><br>
+                                    <input type="radio" id="4" name="foreign_identity" value="700040194R;Janez;Novak;1973-01-09"/>
+                                    <label for="4">700040194R, Janez Novak, 1973-01-09</label><br>
+                                    <input type="radio" id="5" name="foreign_identity" value="700031284A;Елена;Вяльбе;2000-05-05"/>
+                                    <label for="5">700031284A, Елена Вяльбе, 2000-05-05</label><br>
+                                </div>
+                                <% } else {
+                                      if ( showSatu ) { %>
                                 <div class="input-container">
                                     <div class="label-row">
                                         <label for="satu_input" class="form-label strong small" style="margin-top:0">SATU</label>
@@ -103,7 +118,7 @@
                                     </div>
                                     <input id="satu_input" type="text" name="satu" placeholder="99799028388"/>
                                 </div>
-                                <% } %>
+                                <%     } %>
                                 <div class="input-container">
                                     <div class="label-row">
                                         <label for="hetu_input" class="form-label strong small" style="margin-top:0">Henkilötunnus</label>
@@ -111,6 +126,7 @@
                                     </div>
                                     <input id="hetu_input" type="text" name="hetu" placeholder="210281-9988"/>
                                 </div>
+                                <% } %>
                             </form>
                             <form id="login-cancel" action="<%= request.getContextPath() %>/authn/Error" method="post">
                                 <input type="hidden" name="<%= ExternalAuthentication.CONVERSATION_KEY %>"
@@ -130,6 +146,9 @@
                                         $("#page-header").show();
                                         $("#main").show();
                                         $("#page-footer").show();
+                                    }
+                                    if ( <%= foreignSubmit %> ) {
+                                        $('#tunnistaudu').prop('disabled', false);
                                     }
                                     function checkInputs() {
                                         var oneFilled = false;

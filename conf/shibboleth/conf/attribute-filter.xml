@@ -44,5 +44,13 @@
             <PermitValueRule xsi:type="ANY" />
         </AttributeRule>
 
+        <AttributeRule attributeID="ForeignPersonIdentifier">
+            <PermitValueRule xsi:type="ANY" />
+        </AttributeRule>
+
+        <AttributeRule attributeID="Sn">
+            <PermitValueRule xsi:type="ANY" />
+        </AttributeRule>
+
     </AttributeFilterPolicy>
 </AttributeFilterPolicyGroup>

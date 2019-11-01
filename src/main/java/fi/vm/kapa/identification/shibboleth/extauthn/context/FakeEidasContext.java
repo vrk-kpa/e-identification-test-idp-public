@@ -25,38 +25,37 @@ package fi.vm.kapa.identification.shibboleth.extauthn.context;
 
 import org.opensaml.messaging.context.BaseContext;
 
-public class FakeContext extends BaseContext {
+public class FakeEidasContext extends BaseContext {
 
-    private final String satu;
+    private final String personIdentifier;
 
-    private final String hetu;
+    private final String firstName;
 
-    private final String issuerCN;
+    private final String familyName;
 
-    private final String cn;
+    private final String dateOfBirth;
 
-    public FakeContext(String satu, String hetu, String issuerCN, String cn) {
-        this.satu = satu;
-        this.hetu = hetu;
-        this.issuerCN = issuerCN;
-        this.cn = cn;
+    public FakeEidasContext(String personIdentifier, String firstName, String familyName, String dateOfBirth) {
+        this.personIdentifier = personIdentifier;
+        this.firstName = firstName;
+        this.familyName = familyName;
+        this.dateOfBirth = dateOfBirth;
     }
 
-    public String getSatu() {
-        return satu;
+    public String getPersonIdentifier() {
+        return personIdentifier;
     }
 
-    public String getHetu() {
-        return hetu;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public String getIssuerCN() {
-        return issuerCN;
+    public String getFamilyName() {
+        return familyName;
     }
 
-    public String getCn() {
-        return cn;
+    public String getDateOfBirth() {
+        return dateOfBirth;
     }
-
 
 }

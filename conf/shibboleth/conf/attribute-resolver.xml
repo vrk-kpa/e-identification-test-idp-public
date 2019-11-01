@@ -57,9 +57,9 @@
         <AttributeEncoder xsi:type="SAML2String" name="http://eidas.europa.eu/attributes/naturalperson/PersonIdentifier" friendlyName="PersonIdentifier" encodeType="false" />
         <Script><![CDATA[
           authnContext = resolutionContext.getParent().getSubcontext("net.shibboleth.idp.authn.context.AuthenticationContext");
-          fakeContext = authnContext.getSubcontext("fi.vm.kapa.identification.shibboleth.extauthn.context.FakeContext");
-          if ( fakeContext != null && fakeContext.getPersonIdentifier() != null ) {
-            PersonIdentifier.addValue(fakeContext.getPersonIdentifier());
+          fakeEidasContext = authnContext.getSubcontext("fi.vm.kapa.identification.shibboleth.extauthn.context.FakeEidasContext");
+          if ( fakeEidasContext != null && fakeEidasContext.getPersonIdentifier() != null ) {
+            PersonIdentifier.addValue(fakeEidasContext.getPersonIdentifier());
           }
         ]]></Script>
     </AttributeDefinition>
@@ -68,9 +68,15 @@
         <AttributeEncoder xsi:type="SAML2String" name="http://eidas.europa.eu/attributes/naturalperson/CurrentGivenName" friendlyName="FirstName" encodeType="false" />
         <Script><![CDATA[
           authnContext = resolutionContext.getParent().getSubcontext("net.shibboleth.idp.authn.context.AuthenticationContext");
-          fakeContext = authnContext.getSubcontext("fi.vm.kapa.identification.shibboleth.extauthn.context.FakeContext");
-          if ( fakeContext != null && fakeContext.getFirstName() != null ) {
-            FirstName.addValue(fakeContext.getFirstName());
+          fakeEidasContext = authnContext.getSubcontext("fi.vm.kapa.identification.shibboleth.extauthn.context.FakeEidasContext");
+          if ( fakeEidasContext != null && fakeEidasContext.getFirstName() != null ) {
+            FirstName.addValue(fakeEidasContext.getFirstName());
+          }
+          else {
+            FakeForeignContext = authnContext.getSubcontext("fi.vm.kapa.identification.shibboleth.extauthn.context.FakeForeignContext");
+            if ( FakeForeignContext != null && FakeForeignContext.getFirstNames() != null ) {
+                FirstName.addValue(FakeForeignContext.getFirstNames());
+            }
           }
         ]]></Script>
     </AttributeDefinition>
@@ -79,9 +85,9 @@
         <AttributeEncoder xsi:type="SAML2String" name="http://eidas.europa.eu/attributes/naturalperson/CurrentFamilyName" friendlyName="FamilyName" encodeType="false" />
         <Script><![CDATA[
           authnContext = resolutionContext.getParent().getSubcontext("net.shibboleth.idp.authn.context.AuthenticationContext");
-          fakeContext = authnContext.getSubcontext("fi.vm.kapa.identification.shibboleth.extauthn.context.FakeContext");
-          if ( fakeContext != null && fakeContext.getFamilyName() != null ) {
-            FamilyName.addValue(fakeContext.getFamilyName());
+          fakeEidasContext = authnContext.getSubcontext("fi.vm.kapa.identification.shibboleth.extauthn.context.FakeEidasContext");
+          if ( fakeEidasContext != null && fakeEidasContext.getFamilyName() != null ) {
+            FamilyName.addValue(fakeEidasContext.getFamilyName());
           }
         ]]></Script>
     </AttributeDefinition>
@@ -90,9 +96,38 @@
         <AttributeEncoder xsi:type="SAML2String" name="http://eidas.europa.eu/attributes/naturalperson/DateOfBirth" friendlyName="DateOfBirth" encodeType="false" />
         <Script><![CDATA[
           authnContext = resolutionContext.getParent().getSubcontext("net.shibboleth.idp.authn.context.AuthenticationContext");
-          fakeContext = authnContext.getSubcontext("fi.vm.kapa.identification.shibboleth.extauthn.context.FakeContext");
-          if ( fakeContext != null && fakeContext.getDateOfBirth() != null ) {
-            DateOfBirth.addValue(fakeContext.getDateOfBirth());
+          fakeEidasContext = authnContext.getSubcontext("fi.vm.kapa.identification.shibboleth.extauthn.context.FakeEidasContext");
+          if ( fakeEidasContext != null && fakeEidasContext.getDateOfBirth() != null ) {
+            DateOfBirth.addValue(fakeEidasContext.getDateOfBirth());
+          }
+          else {
+            FakeForeignContext = authnContext.getSubcontext("fi.vm.kapa.identification.shibboleth.extauthn.context.FakeForeignContext");
+            if ( FakeForeignContext != null && FakeForeignContext.getDateOfBirth() != null ) {
+                DateOfBirth.addValue(FakeForeignContext.getDateOfBirth());
+            }
+          }
+        ]]></Script>
+    </AttributeDefinition>
+
+
+    <AttributeDefinition id="ForeignPersonIdentifier" xsi:type="ScriptedAttribute">
+        <AttributeEncoder xsi:type="SAML2String" name="urn:oid:1.2.246.517.3002.111.17" friendlyName="ForeignPersonIdentifier" encodeType="false" />
+        <Script><![CDATA[
+          authnContext = resolutionContext.getParent().getSubcontext("net.shibboleth.idp.authn.context.AuthenticationContext");
+          FakeForeignContext = authnContext.getSubcontext("fi.vm.kapa.identification.shibboleth.extauthn.context.FakeForeignContext");
+          if ( FakeForeignContext != null && FakeForeignContext.getForeignPersonIdentifier() != null ) {
+            ForeignPersonIdentifier.addValue(FakeForeignContext.getForeignPersonIdentifier());
+          }
+        ]]></Script>
+    </AttributeDefinition>
+
+    <AttributeDefinition id="Sn" xsi:type="ScriptedAttribute">
+        <AttributeEncoder xsi:type="SAML2String" name="urn:oid:2.5.4.4" friendlyName="Sn" encodeType="false" />
+        <Script><![CDATA[
+          authnContext = resolutionContext.getParent().getSubcontext("net.shibboleth.idp.authn.context.AuthenticationContext");
+          FakeForeignContext = authnContext.getSubcontext("fi.vm.kapa.identification.shibboleth.extauthn.context.FakeForeignContext");
+          if ( FakeForeignContext != null && FakeForeignContext.getFamilyName() != null ) {
+            Sn.addValue(FakeForeignContext.getFamilyName());
           }
         ]]></Script>
     </AttributeDefinition>
