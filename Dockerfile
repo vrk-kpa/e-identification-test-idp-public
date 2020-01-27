@@ -17,6 +17,7 @@ RUN mkdir -p /opt/shibboleth-idp/edit-webapp/WEB-INF/jsp && \
     cp /tmp/conf/tomcat/testidp.xml /usr/share/tomcat/conf/Catalina/localhost/testidp.xml && \
     cp -r /tmp/conf/shibboleth/conf/ /opt/shibboleth-idp/conf && \
     cp /tmp/conf/shibboleth/conf/errors.xml /opt/shibboleth-idp/conf/errors.xml && \
+    cp /tmp/conf/shibboleth/conf/audit.xml /opt/shibboleth-idp/conf/audit.xml && \
     cp /tmp/conf/shibboleth/webapp/web.xml /opt/shibboleth-idp/edit-webapp/WEB-INF/web.xml && \
     cp /tmp/conf/shibboleth/views/fake-prompt.jsp /opt/shibboleth-idp/edit-webapp/WEB-INF/jsp/fake-prompt.jsp && \
     cp /tmp/conf/shibboleth/idp-rebuild.sh /opt/shibboleth-idp/bin/idp-rebuild.sh && \
