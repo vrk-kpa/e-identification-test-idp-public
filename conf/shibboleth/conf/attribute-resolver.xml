@@ -109,6 +109,17 @@
         ]]></Script>
     </AttributeDefinition>
 
+    <AttributeDefinition id="IdentityAssuranceLevel" xsi:type="ScriptedAttribute">
+        <AttributeEncoder xsi:type="SAML2String" name="urn:oid:1.2.246.517.3002.111.17.1" friendlyName="IdentityAssuranceLevel" encodeType="false" />
+        <Script><![CDATA[
+          authnContext = resolutionContext.getParent().getSubcontext("net.shibboleth.idp.authn.context.AuthenticationContext");
+          FakeForeignContext = authnContext.getSubcontext("fi.vm.kapa.identification.shibboleth.extauthn.context.FakeForeignContext");
+          if ( FakeForeignContext != null && FakeForeignContext.getIdentityAssuranceLevel() != null ) {
+            IdentityAssuranceLevel.addValue(FakeForeignContext.getIdentityAssuranceLevel());
+          }
+        ]]></Script>
+    </AttributeDefinition>
+
 
     <AttributeDefinition id="ForeignPersonIdentifier" xsi:type="ScriptedAttribute">
         <AttributeEncoder xsi:type="SAML2String" name="urn:oid:1.2.246.517.3002.111.17" friendlyName="ForeignPersonIdentifier" encodeType="false" />

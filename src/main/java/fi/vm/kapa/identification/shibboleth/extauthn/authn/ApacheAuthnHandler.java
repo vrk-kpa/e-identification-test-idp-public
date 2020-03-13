@@ -30,6 +30,9 @@ import fi.vm.kapa.identification.type.AuthMethod;
 import net.shibboleth.idp.authn.ExternalAuthentication;
 import net.shibboleth.idp.authn.ExternalAuthenticationException;
 import net.shibboleth.idp.authn.context.AuthenticationContext;
+import net.shibboleth.idp.authn.context.RequestedPrincipalContext;
+import net.shibboleth.idp.authn.principal.UsernamePrincipal;
+import net.shibboleth.idp.saml.authn.principal.AuthnContextClassRefPrincipal;
 import org.apache.commons.lang.StringUtils;
 import org.opensaml.profile.context.ProfileRequestContext;
 import org.opensaml.saml.saml2.core.AuthnContextClassRef;
@@ -42,12 +45,16 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import javax.security.auth.Subject;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.Principal;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 @PropertySource(value = "file:///opt/identity-provider/fake-identity-provider.properties")
@@ -67,6 +74,7 @@ public class ApacheAuthnHandler {
 
             ProfileRequestContext prc = ExternalAuthentication.getProfileRequestContext(key, httpRequest);
             AuthenticationContext ac = prc.getSubcontext(AuthenticationContext.class);
+            String contextClassRef = resolveRequestedAuthenticationContextClass(prc);
 
             if ( isForeignIdentification(prc) ) {
                 String[] userData = httpRequest.getParameter("foreign_identity").split(";");
@@ -76,6 +84,9 @@ public class ApacheAuthnHandler {
             else if (isEidasRequest(prc)) {
                 String[] userData = getUserDataByCookie(httpRequest);
                 ac.addSubcontext(new FakeEidasContext(userData[0], userData[1], userData[2], userData[3]));
+                if ( userData.length > 4 ) {
+                    contextClassRef = userData[4];
+                }
                 logger.debug("eIDAS authentication");
             } else {
                 String satu = httpRequest.getParameter("satu");
@@ -99,12 +110,39 @@ public class ApacheAuthnHandler {
                 logger.debug("SATU: " + satu + ", HETU: " + hetu + ", issuerCN: " + issuerCN + ", CN: " + cn);
             }
 
-            httpRequest.setAttribute(ExternalAuthentication.PRINCIPAL_NAME_KEY, "FAKE");
+            Set<Principal> principals = new HashSet<>();
+            principals.add(new UsernamePrincipal("FAKE"));
+            principals.add(new AuthnContextClassRefPrincipal(contextClassRef));
+
+            Subject subject = new Subject();
+            subject.getPrincipals().addAll(principals);
+            httpRequest.setAttribute(ExternalAuthentication.SUBJECT_KEY, subject);
+
             ExternalAuthentication.finishExternalAuthentication(key, httpRequest, httpResponse);
 
         } catch (final ExternalAuthenticationException e) {
             throw new ServletException("Error processing external authentication request", e);
         }
+    }
+
+    private String resolveRequestedAuthenticationContextClass(ProfileRequestContext profileRequestContext) throws ExternalAuthenticationException {
+        AuthenticationContext ac = profileRequestContext.getSubcontext(AuthenticationContext.class);
+        RequestedPrincipalContext rpc = ac.getSubcontext(RequestedPrincipalContext.class);
+        if (rpc != null) {
+            for (Principal principal : rpc.getRequestedPrincipals()) {
+                if (principal instanceof AuthnContextClassRefPrincipal) {
+                    String authenticationContextOid = principal.getName();
+                    logger.debug("Requested principal: " + authenticationContextOid);
+                    for (AuthMethod authMethod : AuthMethod.values()) {
+                        if (authMethod.getOidValue().contentEquals(authenticationContextOid)) {
+                            logger.debug("Requested oid friendly name: " + authMethod.toString());
+                            return authenticationContextOid;
+                        }
+                    }
+                }
+            }
+        }
+        throw new ExternalAuthenticationException("No valid requested context class found");
     }
 
     public static boolean showSatu(ProfileRequestContext prc) {

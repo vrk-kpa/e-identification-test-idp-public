@@ -2,6 +2,7 @@
 failure.param.internal=fakeint
 failure.param.entityid=entid
 
+# user identities for eIDAS: personidentifier;firstname;familyname;dateofbirth(;authenticationcontextclassref)
 country.AT=AT/FI/24243SKFSA3;Maximilian Jakob;Austria;1981-02-03
 country.GB=GB/FI/24243SKFSA5;Oliver Jack;Great Britain;1981-02-04
 country.ES=ES/FI/24243SKFSA4;José Pedro;Spain;1981-02-05
@@ -16,7 +17,7 @@ country.NK=NK/FI/24243SKFSA0;Mathias Oliver;Norway;1981-02-15
 country.DK=DK/FI/253243SKFSA21;Sofia Alma;Danmark;1981-02-17
 country.ML=ML/FI/253243SKFSA51;Emma Julia;Malta; 1981-02-18
 country.PT=PT/FI/253243SKFSA71;Maria Leonor;Portugal;1981-02-19
-country.IT=IT/FI/253243SKFSAF1;Giulia Aurora;Italy;1981-02-22
+country.IT=IT/FI/253243SKFSAF1;Giulia Aurora;Italy;1981-02-22;http://eidas.europa.eu/LoA/high
 country.BE=BE/FI/253243SKFSAE1;Marie Julie;Belgium;1981-02-23
 country.CZ=CZ/FI/253243SKFSAD1;Agata Anastazie;Czech Republic;1981-02-24
 country.LU=LU/FI/253243SKFSAD1;Emma Lara;Luxembourg;1981-02-25

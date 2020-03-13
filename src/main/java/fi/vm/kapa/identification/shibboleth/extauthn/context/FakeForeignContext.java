@@ -35,6 +35,8 @@ public class FakeForeignContext extends BaseContext {
 
     private final String dateOfBirth;
 
+    private final String identityAssuranceLevel = "http://uid.vrk.fi/LoA/0";
+
     public FakeForeignContext(String foreignPersonIdentifier, String firstNames, String familyName, String dateOfBirth) {
         this.foreignPersonIdentifier = foreignPersonIdentifier;
         this.firstNames = firstNames;
@@ -57,6 +59,10 @@ public class FakeForeignContext extends BaseContext {
 
     public String getDateOfBirth() {
         return this.dateOfBirth;
+    }
+
+    public String getIdentityAssuranceLevel() {
+        return identityAssuranceLevel;
     }
 
 }
